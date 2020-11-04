@@ -9,14 +9,14 @@
                     <label for="">用户名</label>
                     <a-input type="password" autocomplete="off"/>
                 </a-form-item>
-                <a-form-item>
+                <a-form-item class="password">
                     <label for="">密码</label>
                     <a-input type="password" autocomplete="off"/>
                 </a-form-item>
                 <!--                <a-form-item name="age">-->
                 <!--                    <div id="captcha-dom" class="nc-container"></div>-->
                 <!--                </a-form-item>-->
-                <a-form-item>
+                <a-form-item class="yzm">
                     <div id="captcha-dom" class="nc-container"></div>
                     <!--No-Captcha渲染的位置，其中 class 中必须包含 nc-container-->
                 </a-form-item>
@@ -97,7 +97,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     #acount {
         width: 100%;
         height: 100%;
@@ -111,11 +111,33 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
+            /*border: 1px solid red;*/
 
             label {
                 display: block;
                 color: #fff;
                 font-size: 14px;
+            }
+
+            .ant-col {
+                width: 100%;
+            }
+
+            .password {
+                margin-top: -15px;
+            }
+
+            .yzm {
+                margin-bottom: 25px;
+                margin-top: 20px;
+            }
+
+            .nc-container #nc_1_wrapper {
+                width: 100%;
+            }
+
+            .nc-container .nc_scale span {
+                height: 34px;
             }
         }
     }

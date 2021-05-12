@@ -1,16 +1,25 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-// import Home from "../views/Home.vue";
 
 const routes = [
   {
-    path: "/",
+    path: "/",//登录
     name: "Login",
     component: () => import("../views/acount/login.vue")
   },
   {
-    path: "/registered",
+    path: "/registered",//注册
     name: "registered",
     component: () => import("../views/acount/registered.vue")
+  },
+  {
+    path: "/forgot",//忘记密码
+    name: "forgot",
+    component: () => import("../views/acount/forgot.vue")
+  },
+  {
+    path: "/index",//登录后首页
+    name: "index",
+    component: () => import("../views/Layout/index.vue")
   },
 ];
 

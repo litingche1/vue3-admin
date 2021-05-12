@@ -2,4 +2,18 @@
 .text-center{text-align: center};
 .fs-12{font-size: 12px};
 .color-white{color:#fff};
-    
+html,body{
+    height:100%;
+}
+@for $i from 1 through 100 {
+    .mt#{$i} { margin-top:1px*$i; }
+  }
+  @for $i from 1 through 100 {
+    .ml#{$i} { margin-left:1px*$i; }
+  }
+  @for $i from 1 through 100 {
+    .mr#{$i} { margin-right:1px*$i; }
+  }
+  @for $i from 1 through 100 {
+    .mb#{$i} { margin-bottom:1px*$i; }
+  }    

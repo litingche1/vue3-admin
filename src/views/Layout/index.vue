@@ -1,7 +1,7 @@
 <template>
   <a-layout>
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
-        <Header></Header> 
+          <Menu></Menu>
       <!-- <div class="logo" />
       <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys">
         <a-menu-item key="1">
@@ -20,7 +20,7 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header style="background: #fff; padding: 0">
-          <Menu></Menu>
+        <Header></Header> 
         <!-- <menu-unfold-outlined
           v-if="collapsed"
           class="trigger"

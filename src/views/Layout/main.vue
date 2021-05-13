@@ -1,16 +1,18 @@
 <template>
-    <div>
-        内容区域
+    <div id="main">
+        <router-view />
     </div>
 </template>
 <script>
 export default {
-    name:'',
+    name:'main',
     setup(props) {
         
     }
 }
 </script>
 <style lang="scss">
-    
+    #main{
+        
+    }
 </style>

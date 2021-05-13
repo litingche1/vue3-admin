@@ -38,10 +38,19 @@ const routes = [
         path: "/role",//登录后首页
         name: "role",
         meta: {
-          title: '用户角色',
+          title: '用户角色222',
         },
         component: () => import("../views/managementDesk/userRole.vue"),
-
+        children:[
+          {
+            path: "/role2",//登录后首页
+        name: "role2",
+        meta: {
+          title: '用户角色1-1',
+        },
+        component: () => import("../views/managementDesk/userRole.vue"),
+          }
+        ]
       }
     ]
   },

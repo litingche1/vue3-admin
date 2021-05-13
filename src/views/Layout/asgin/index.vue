@@ -1,8 +1,8 @@
 <template>
   <div id="asginmenu">
     <a-menu
-      :default-selected-keys="['1']"
-      :default-open-keys="['sub1']"
+      v-model:openKeys="openKeys"
+      v-model:selectedKeys="selectedKeys"
       mode="inline"
       theme="dark"
       :inline-collapsed="collapsed"
@@ -13,37 +13,37 @@
             <!-- <PieChartOutlined /> -->
             <span>{{ item.meta && item.meta.title }}</span>
           </a-menu-item>
-          <a-sub-menu v-else :key="item.path">
-            <template #title>
-              <span>
-                <span>{{ item.meta && item.meta.title }}</span>
-              </span>
-            </template>
-            <template v-if="item.children.length > 0">
-              <a-menu-item v-for="child in item.children" :key="child.path">{{
-                child.meta && child.meta.title
-              }}</a-menu-item>
-            </template>
-          </a-sub-menu>
+                 <Menu v-else :data="item"></Menu>
         </template>
       </template>
     </a-menu>
   </div>
 </template>
 <script>
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, watch } from "vue";
 import { useRouter } from "vue-router";
+import Menu from "./Menu"
 export default {
   name: "",
+   components: {
+    Menu,
+  },
   setup(props) {
     const { options } = useRouter();
     // console.log(options.routes);
     const state = reactive({
       collapsed: false,
-      selectedKeys: ["1"],
-      openKeys: ["sub1"],
-      preOpenKeys: ["sub1"]
+      selectedKeys: ["2"],
+      openKeys: ["/managementDesk"],
+    //   preOpenKeys: ["sub1"]
     });
+
+       watch(
+      () => state.openKeys,
+      (val, oldVal) => {
+        state.preOpenKeys = oldVal;
+      },
+    );
     return {
       ...toRefs(state),
       options

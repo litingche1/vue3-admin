@@ -48,7 +48,7 @@
 <script>
 import Content from '@/views/Layout/main'
 import Header from '@/views/Layout/header'
-import Menu from '@/views/Layout/asginMenu'
+import Menu from '@/views/Layout/asgin/index'
 import {
   UserOutlined,
   VideoCameraOutlined,

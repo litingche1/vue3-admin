@@ -24,7 +24,7 @@ const routes = [
     name: "index",
     meta: {
       title: '首页',
-      icon:'icon-aside-home',
+      icon:'home',
     },
     hidden: false,
     component: () => import("../views/Layout/index.vue")
@@ -35,7 +35,7 @@ const routes = [
     hidden: false,
     meta: {
       title: '管理总台',
-      icon:'icon-aside-console'
+      icon:'console'
     },
     component: () => import("../views/Layout/index.vue"),
     children: [
@@ -65,7 +65,7 @@ const routes = [
     hidden: false,
     meta: {
       title: '信息管理',
-      icon:'icon-aside-informtion'
+      icon:'informtion'
     },
     component: () => import("../views/Layout/index.vue"),
   },
@@ -75,7 +75,7 @@ const routes = [
     hidden: false,
     meta: {
       title: '用户管理',
-      icon:'icon-aside-user'
+      icon:'user1'
     },
     component: () => import("../views/Layout/index.vue"),
   },

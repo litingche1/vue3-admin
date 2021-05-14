@@ -15,7 +15,8 @@
       <template v-for="item in options.routes">
         <template v-if="!item.hidden">
           <a-menu-item v-if="!item.children" :key="item.path">
-            <i class="icon-size-21 mb--5 mr6" :class="item.meta && item.meta.icon"></i>
+            <SvgIcon :iconName="item.meta && item.meta.icon" className="aside-svg"></SvgIcon>
+            <!-- <i class="icon-size-21 mb--5 mr6" :class="item.meta && item.meta.icon"></i> -->
             <span>{{ item.meta && item.meta.title }}</span>
           </a-menu-item>
           <Menu v-else :data="item" :key="item.path"></Menu>
@@ -28,10 +29,12 @@
 import { reactive, toRefs, watch } from "vue";
 import { useRouter } from "vue-router";
 import Menu from "./Menu";
+import SvgIcon from '@/components/Svgicon'
 export default {
   name: "",
   components: {
-    Menu
+    Menu,
+    SvgIcon
   },
   setup(props) {
     const { options } = useRouter();

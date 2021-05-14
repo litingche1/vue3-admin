@@ -22,7 +22,11 @@ const routes = [
   {
     path: "/index",//登录后首页
     name: "index",
-    hidden: true,
+    meta: {
+      title: '首页',
+      icon:'icon-aside-home',
+    },
+    hidden: false,
     component: () => import("../views/Layout/index.vue")
   },
   {
@@ -31,6 +35,7 @@ const routes = [
     hidden: false,
     meta: {
       title: '管理总台',
+      icon:'icon-aside-console'
     },
     component: () => import("../views/Layout/index.vue"),
     children: [
@@ -41,25 +46,36 @@ const routes = [
           title: '用户角色222',
         },
         component: () => import("../views/managementDesk/userRole.vue"),
-        children:[
+        children: [
           {
             path: "/role2",//登录后首页
-        name: "role2",
-        meta: {
-          title: '用户角色1-1',
-        },
-        component: () => import("../views/managementDesk/userRole.vue"),
+            name: "role2",
+            meta: {
+              title: '用户角色1-1',
+            },
+            component: () => import("../views/managementDesk/userRole.vue"),
           }
         ]
       }
     ]
   },
   {
-    path: "/managementDesk2",//登录后首页
-    name: "managementDesk2",
+    path: "/informtion",//登录后首页
+    name: "informtion",
     hidden: false,
     meta: {
-      title: '管理总台2'
+      title: '信息管理',
+      icon:'icon-aside-informtion'
+    },
+    component: () => import("../views/Layout/index.vue"),
+  },
+  {
+    path: "/user",//登录后首页
+    name: "user",
+    hidden: false,
+    meta: {
+      title: '用户管理',
+      icon:'icon-aside-user'
     },
     component: () => import("../views/Layout/index.vue"),
   },

@@ -1,16 +1,24 @@
 <template>
   <div id="header">
+    <SvgIcon
+      iconName="collapsed"
+      className="aside-svg"
+      class="collapse"
+      @click="setUpCollapsed"
+    ></SvgIcon>
+
     <div class="avatar">
       <a-dropdown>
         <a class="ant-dropdown-link" @click.prevent>
-          <!-- Hover me -->
-          <!-- <DownOutlined /> -->
           <img src="../../assets/img/tx.jpg" alt="" />
         </a>
         <template #overlay>
           <a-menu>
             <a-menu-item>
-              <a href="javascript:;">用户名</a>
+              <a href="javascript:;">
+                <SvgIcon iconName="member" className="aside-svg"></SvgIcon>
+                用户名</a
+              >
             </a-menu-item>
             <a-menu-item class="language">
               <a href="javascript:;">
@@ -19,12 +27,20 @@
                   key="item.id"
                   :class="{ mr8: idx === 0 }"
                   @click="changLanguage(item.id)"
-                  >{{ item.label }}</span
                 >
+                  <SvgIcon
+                    :iconName="item.icon"
+                    className="aside-svg"
+                  ></SvgIcon>
+                  <span>{{ item.label }}</span>
+                </span>
               </a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;">{{ $t("header_menu.logout") }}</a>
+              <a href="javascript:;">
+                <SvgIcon iconName="exit" className="aside-svg"></SvgIcon>
+                {{ $t("header_menu.logout") }}</a
+              >
             </a-menu-item>
           </a-menu>
         </template>
@@ -33,7 +49,7 @@
   </div>
 </template>
 <script>
-import { reactive } from "vue";
+import { reactive, getCurrentInstance } from "vue";
 import { DownOutlined } from "@ant-design/icons-vue";
 import { useI18n } from "vue-i18n";
 export default {
@@ -43,10 +59,11 @@ export default {
   },
   setup(props) {
     const { locale } = useI18n({ useScope: "global" });
+    const { emit } = getCurrentInstance();
     const language = reactive({
       data: [
-        { label: "中文", id: "ch" },
-        { label: "英文", id: "eh" }
+        { label: "中文", id: "ch", icon: "lang" },
+        { label: "英文", id: "eh", icon: "lang" }
       ],
       current: ""
     });
@@ -54,9 +71,13 @@ export default {
       locale.value = value;
       language.current = value;
     };
+    const setUpCollapsed = () => {
+      emit("setCollapsed");
+    };
     return {
       language,
-      changLanguage
+      changLanguage,
+      setUpCollapsed
     };
   }
 };
@@ -66,12 +87,16 @@ export default {
   height: 100%;
   box-sizing: border-box;
   padding: 0 20px;
+  .collapse {
+    cursor: pointer;
+  }
   .avatar {
     width: 50px;
     height: 50px;
     float: right;
     margin-top: 10px;
     box-sizing: border-box;
+    color: #888;
     border-radius: 50% !important;
 
     img {

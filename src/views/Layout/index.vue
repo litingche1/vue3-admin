@@ -1,36 +1,11 @@
 <template>
   <a-layout>
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
-          <Menu></Menu>
-      <!-- <div class="logo" />
-      <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys">
-        <a-menu-item key="1">
-          <user-outlined />
-          <span>nav 1</span>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <video-camera-outlined />
-          <span>nav 2</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <upload-outlined />
-          <span>nav 3</span>
-        </a-menu-item>
-      </a-menu> -->
+      <Menu v-model:collapsed="collapsed"></Menu>
     </a-layout-sider>
     <a-layout>
       <a-layout-header style="background: #fff; padding: 0">
-        <Header></Header> 
-        <!-- <menu-unfold-outlined
-          v-if="collapsed"
-          class="trigger"
-          @click="() => (collapsed = !collapsed)"
-        />
-        <menu-fold-outlined
-          v-else  
-          class="trigger"
-          @click="() => (collapsed = !collapsed)"
-        /> -->
+        <Header @setCollapsed="closedCollapsed"></Header>
       </a-layout-header>
       <a-layout-content
         :style="{
@@ -46,40 +21,35 @@
   </a-layout>
 </template>
 <script>
-import Content from '@/views/Layout/main'
-import Header from '@/views/Layout/header'
-import Menu from '@/views/Layout/asgin/index'
-import {
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined
-} from "@ant-design/icons-vue";
-import { defineComponent, ref } from "vue";
+import Content from "@/views/Layout/main";
+import Header from "@/views/Layout/header";
+import Menu from "@/views/Layout/asgin/index";
+import { defineComponent, ref, toRefs,reactive } from "vue";
 export default defineComponent({
   components: {
-    UserOutlined,
-    VideoCameraOutlined,
-    UploadOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
     Content,
     Header,
     Menu
   },
-
   setup() {
+    const data = reactive({
+      selectedKeys: ["1"],
+      collapsed: JSON.parse(localStorage.getItem("collapsed"))
+    });
+    const closedCollapsed = value => {
+      data.collapsed = !data.collapsed;
+      localStorage.setItem("collapsed", data.collapsed);
+    };
     return {
-      selectedKeys: ref(["1"]),
-      collapsed: ref(false)
+      ...toRefs(data),
+      closedCollapsed
     };
   }
 });
 </script>
 <style lang="scss">
-.ant-layout{
-    height:100%;
+.ant-layout {
+  height: 100%;
 }
 #components-layout-demo-custom-trigger .trigger {
   font-size: 18px;
@@ -93,7 +63,7 @@ export default defineComponent({
   color: #1890ff;
 }
 
- .logo {
+.logo {
   height: 32px;
   background: rgba(255, 255, 255, 0.3);
   margin: 16px;

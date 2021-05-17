@@ -27,7 +27,17 @@ const routes = [
       icon:'home',
     },
     hidden: false,
-    component: () => import("../views/Layout/index.vue")
+    component: () => import("../views/Layout/index.vue"),
+    children: [
+      {
+        path: "/home",
+        name: "Home",
+        meta: {
+          title: "首页"
+        },
+        component: () => import("../views/home/index.vue")
+      }
+    ]
   },
   {
     path: "/managementDesk",//登录后首页
@@ -56,7 +66,15 @@ const routes = [
             component: () => import("../views/managementDesk/userRole.vue"),
           }
         ]
-      }
+      },
+      {
+        path: "/informtion3",//登录后首页
+        name: "informtion3",
+        meta: {
+          title: '信息管理1-1',
+        },
+        component: () => import("../views/informtion/index.vue"),
+      },
     ]
   },
   {
@@ -68,6 +86,34 @@ const routes = [
       icon:'informtion'
     },
     component: () => import("../views/Layout/index.vue"),
+    children: [
+      {
+        path: "/informtion2",//登录后首页
+        name: "informtion2",
+        meta: {
+          title: '用户角色222',
+        },
+        component: () => import("../views/informtion/index.vue"),
+        children: [
+          {
+            path: "/informtion3",//登录后首页
+            name: "informtion3",
+            meta: {
+              title: '信息管理1-1',
+            },
+            component: () => import("../views/informtion/index.vue"),
+          },
+          {
+            path: "/informtion4",//登录后首页
+            name: "informtion4",
+            meta: {
+              title: '信息管理2-1',
+            },
+            component: () => import("../views/informtion/index.vue"),
+          }
+        ]
+      }
+    ]
   },
   {
     path: "/user",//登录后首页
@@ -78,6 +124,7 @@ const routes = [
       icon:'user1'
     },
     component: () => import("../views/Layout/index.vue"),
+    children:[]
   },
 ];
 

@@ -91,7 +91,33 @@ const routes = [
         path: "/informtion2",//登录后首页
         name: "informtion2",
         meta: {
-          title: '用户角色222',
+          title: '信息管理1',
+        },
+        component: () => import("../views/informtion/index.vue"),
+        children: [
+          {
+            path: "/informtion3",//登录后首页
+            name: "informtion3",
+            meta: {
+              title: '信息管理1-1',
+            },
+            component: () => import("../views/informtion/index.vue"),
+          },
+          {
+            path: "/informtion4",//登录后首页
+            name: "informtion4",
+            meta: {
+              title: '信息管理2-1',
+            },
+            component: () => import("../views/informtion/index.vue"),
+          }
+        ]
+      },
+      {
+        path: "/informtion2",//登录后首页
+        name: "informtion2",
+        meta: {
+          title: '信息管理1',
         },
         component: () => import("../views/informtion/index.vue"),
         children: [

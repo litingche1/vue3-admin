@@ -16,14 +16,17 @@
       <template v-for="item in options.routes">
         <template v-if="!item.hidden">
           <!-- <a-menu-item v-if="!item.children" :key="item.path"> -->
-                 <a-menu-item v-if="haschildren(item)" :key="item.path">
+          <a-menu-item v-if="haschildren(item)" :key="item.path">
             <router-link :to="item.children[0].path">
-                 <span class="anticon">
-              <SvgIcon :iconName="item.meta && item.meta.icon" class="aside-svg"></SvgIcon>
-            </span>
-            <span>{{ item.children[0].meta && item.children[0].meta.title }}</span>
+              <span class="anticon">
+                <SvgIcon :iconName="item.meta && item.meta.icon" class="aside-svg"></SvgIcon>
+              </span>
+              <span>
+                {{
+                item.children[0].meta && item.children[0].meta.title
+                }}
+              </span>
             </router-link>
-         
           </a-menu-item>
           <Menu v-else :data="item" :key="item.path"></Menu>
         </template>
@@ -79,18 +82,24 @@ export default {
       }
     );
     //
-    const haschildren=(data)=>{
-           // 不存在子级的情况
-            if(!data.children) { return false; }
-            console.log(data.children)
-            // 过滤隐藏的子级路由
-            const routers = data.children.filter(item => item.hidden ? false : true);
-            // 判断最终结果 
-            if(routers.length === 1) { return true; }
-            return false;
+    const haschildren = data => {
+      // 不存在子级的情况
+      if (!data.children) {
+        return false;
+      }
+      console.log(data.children);
+      // 过滤隐藏的子级路由
+      const routers = data.children.filter(item =>
+        item.hidden ? false : true
+      );
+      // 判断最终结果
+      if (routers.length === 1) {
+        return true;
+      }
+      return false;
 
- console.log(data)
-    }
+      console.log(data);
+    };
     return {
       ...toRefs(state),
       options,

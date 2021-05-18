@@ -29,6 +29,7 @@
 <script>
 import { reactive, onMounted } from "vue";
 import captcha from '@/components/captcha'
+import{Send} from '@/api/user/index'
 // import "./captcha.js";
 export default {
   name: "login",
@@ -43,6 +44,7 @@ captcha
         wrapperCol: { span: 14 }
       }
     });
+    Send()
     return {
       fromConfig
     };

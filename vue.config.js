@@ -35,12 +35,12 @@ module.exports = {
     host: "0.0.0.0", // 可以让外部访问
     port: 8000,
     proxy: {
-      "/devApi": {
-        target: 'http://www.web-jshtml.cn/api/vue3/',
+      [process.env.VUE_APP_FLAG]: {
+        target: process.env.VUE_APP_APIURL,
         ws: false, // webstock
         changeOrigin: true, // 是否开启跨域
         pathRewrite: {
-          "^/devApi": ""
+          [`^${process.env.VUE_APP_FLAG}`]: ""
         }
       }
     }

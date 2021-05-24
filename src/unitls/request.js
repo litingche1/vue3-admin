@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { message } from "ant-design-vue";
 const service = axios.create({
   baseURL: "/devApi",
   timeout: 5000
@@ -20,10 +20,18 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
   function(response) {
+    const data = response.data;
+    if (data.resCode === 0) {
+      return Promise.resolve(data);
+    } else {
+      message.info(data.message);
+      return Promise.reject(data);
+    }
     // 对响应数据做点什么
-    return response;
   },
   function(error) {
+    const data = JSON.parse(error.request.response);
+    message.info(data.message);
     // 对响应错误做点什么
     return Promise.reject(error);
   }

@@ -8,3 +8,11 @@ export function Send(data) {
     data
   });
 }
+/** 用户名检测 */
+export function ChekcUsername(data) {
+  return service.request({
+    url: "/v1/account/check",
+    method: "post",
+    data
+  });
+}

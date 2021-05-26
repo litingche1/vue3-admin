@@ -8,9 +8,9 @@
         :rules="rules"
         @finish="handleFinish"
       >
-        <a-form-item name="username">
+        <a-form-item name="username" ref="username">
           <label for>用户名</label>
-          <a-input type="text" autocomplete="off" v-model:value="formState.username" />
+          <a-input type="text" autocomplete="off" :disabled="usernameStatus" v-model:value="formState.username" @change="() => {$refs.username.onFieldChange()}"/>
         </a-form-item>
         <a-form-item class="password" name="password">
           <label for>密码</label>
@@ -33,16 +33,16 @@
             <a-col :span="9">
               <a-button
                 type="primary"
-                :disabled="buttonInformation.disabled"
+                :disabled="buttonInformation.disable"
                 :loading="buttonInformation.loading"
                 @click="getCode"
               >{{ buttonInformation.name }}</a-button>
             </a-col>
           </a-row>
         </a-form-item>
-        <a-form-item class="yzm">
+        <!-- <a-form-item class="yzm">
           <captcha />
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item>
           <a-button type="primary" html-type="submit" block>注册</a-button>
         </a-form-item>
@@ -59,6 +59,7 @@ import { reactive, onMounted, ref } from "vue";
 import { message } from "ant-design-vue";
 import captcha from "@/components/captcha";
 import { checkPhone, checkPassword, checkCode } from "@/unitls/validation";
+import{ChekcUsername} from '@/api/user/index'
 export default {
   name: "registered",
   components: {
@@ -78,6 +79,15 @@ export default {
       confirmPassword: "",
       verificationCode: ""
     });
+    //按钮信息
+    const buttonInformation = reactive({
+      name: "获取验证码",
+      disable: true,
+      loading: false,
+      countdown: 60,
+      timer: ""
+    });
+    const usernameStatus=ref(false)
     //自定义手机号校验
     const validatePhone = async (rule, value) => {
       if (value === "") {
@@ -86,6 +96,7 @@ export default {
         if (!checkPhone(value)) {
           return Promise.reject("请输入正确的手机号码");
         }
+        ChekcUsernameFn()
         return Promise.resolve();
       }
     };
@@ -131,6 +142,16 @@ export default {
         return Promise.resolve();
       }
     };
+    //用户名检测是否已经注册
+    const ChekcUsernameFn=()=>{
+      usernameStatus.value=true
+       ChekcUsername({username:formState.username}).then(res=>{
+         if(!res.content.user){
+           usernameStatus.value=false
+           buttonInformation.disable=false
+         }
+       })
+    }
     const rules = reactive({
       username: [{ validator: validatePhone, trigger: "change" }],
       password: [{ validator: validatePassword, trigger: "change" }],
@@ -142,21 +163,13 @@ export default {
     const handleFinish = values => {
       console.log(values);
     };
-    //按钮信息
-    const buttonInformation = reactive({
-      name: "获取验证码",
-      disable: false,
-      loading: false,
-      countdown: 60,
-      timer: ""
-    });
 
     //获取验证码
     const getCode = () => {
-      if (!formState.username) {
-        message.error("用户名不能为空");
-        return false;
-      }
+      // if (!formState.username) {
+      //   message.error("用户名不能为空");
+      //   return false;
+      // }
       if (buttonInformation.timer) clearInterval(buttonInformation.timer);
       // buttonInformation.loading = true;
       buttonInformation.disable = true;
@@ -178,7 +191,8 @@ export default {
       handleFinish,
       rules,
       buttonInformation,
-      getCode
+      getCode,
+      usernameStatus
     };
   }
 };

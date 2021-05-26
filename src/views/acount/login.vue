@@ -44,7 +44,7 @@ captcha
         wrapperCol: { span: 14 }
       }
     });
-    Send()
+    // Send()
     return {
       fromConfig
     };

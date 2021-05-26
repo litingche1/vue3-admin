@@ -21,7 +21,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   function(response) {
     const data = response.data;
-    if (data.resCode === 0) {
+    if (data.resCode === 0 || data.error_code === 0) {
       return Promise.resolve(data);
     } else {
       message.info(data.message);

@@ -10,22 +10,29 @@
       >
         <a-form-item name="username" ref="username">
           <label for>用户名</label>
-          <a-input type="text" autocomplete="off" :disabled="usernameStatus" v-model:value="formState.username" @change="() => {$refs.username.onFieldChange()}"/>
+          <a-input
+            type="text"
+            autocomplete="off"
+            :disabled="usernameStatus"
+            v-model:value="formState.username"
+            placeholder="请输入用户名"
+            @change="() => {$refs.username.onFieldChange()}"
+          />
         </a-form-item>
-        <a-form-item class="password" name="password">
+        <a-form-item class="password" name="password" ref="pass">
           <label for>密码</label>
-          <a-input type="password" autocomplete="off" v-model:value="formState.password" />
+          <a-input-password   autocomplete="off" v-model:value="formState.password" placeholder="请输入密码" @change="() => {$refs.pass.onFieldChange()}"/>
         </a-form-item>
-        <a-form-item class="password" name="confirmPassword">
+        <a-form-item class="password" name="confirmPassword" ref="password">
           <label for>确认密码</label>
-          <a-input type="password" autocomplete="off" v-model:value="formState.confirmPassword" />
+          <a-input-password  autocomplete="off" v-model:value="formState.confirmPassword" placeholder="请输入确认密码" @change="() => {$refs.password.onFieldChange()}" />
         </a-form-item>
         <a-form-item class="password" name="verificationCode">
           <label for>验证码</label>
           <a-row :gutter="8">
             <a-col :span="15">
               <a-input
-                type="password"
+                type="text"
                 autocomplete="off"
                 v-model:value="formState.verificationCode"
               />
@@ -42,7 +49,7 @@
         </a-form-item>
         <!-- <a-form-item class="yzm">
           <captcha />
-        </a-form-item> -->
+        </a-form-item>-->
         <a-form-item>
           <a-button type="primary" html-type="submit" block>注册</a-button>
         </a-form-item>
@@ -59,13 +66,16 @@ import { reactive, onMounted, ref } from "vue";
 import { message } from "ant-design-vue";
 import captcha from "@/components/captcha";
 import { checkPhone, checkPassword, checkCode } from "@/unitls/validation";
-import{ChekcUsername} from '@/api/user/index'
+import { ChekcUsername,Send,Login } from "@/api/user/index";
+import { useRouter } from "vue-router";
 export default {
   name: "registered",
   components: {
     captcha
   },
   setup(props) {
+    //获取路由的push()方法
+    const{push}=useRouter()
     const formRef = ref();
     const fromConfig = reactive({
       layout: {
@@ -87,7 +97,7 @@ export default {
       countdown: 60,
       timer: ""
     });
-    const usernameStatus=ref(false)
+    const usernameStatus = ref(false);
     //自定义手机号校验
     const validatePhone = async (rule, value) => {
       if (value === "") {
@@ -96,7 +106,7 @@ export default {
         if (!checkPhone(value)) {
           return Promise.reject("请输入正确的手机号码");
         }
-        ChekcUsernameFn()
+        ChekcUsernameFn();
         return Promise.resolve();
       }
     };
@@ -137,21 +147,24 @@ export default {
         return Promise.reject("请输入验证码");
       } else {
         if (!checkCode(value)) {
-          return Promise.reject("请输入6位的数字+字母的验证码");
+          return Promise.reject("请输入6位的数字的验证码");
         }
         return Promise.resolve();
       }
     };
     //用户名检测是否已经注册
-    const ChekcUsernameFn=()=>{
-      usernameStatus.value=true
-       ChekcUsername({username:formState.username}).then(res=>{
-         if(!res.content.user){
-           usernameStatus.value=false
-           buttonInformation.disable=false
-         }
-       })
-    }
+    const ChekcUsernameFn = () => {
+      usernameStatus.value = true;
+      ChekcUsername({ username: formState.username }).then(res => {
+        if (!res.content.user) {
+          usernameStatus.value = false;
+          buttonInformation.disable = false;
+        }else{
+          message.error(res.msg);
+          usernameStatus.value = false;
+        }
+      });
+    };
     const rules = reactive({
       username: [{ validator: validatePhone, trigger: "change" }],
       password: [{ validator: validatePassword, trigger: "change" }],
@@ -160,16 +173,30 @@ export default {
       ],
       verificationCode: [{ validator: validatecode, trigger: "change" }]
     });
-    const handleFinish = values => {
-      console.log(values);
+    const handleFinish = async values => {
+      const params={
+        username:values.username,
+        password:values.password,
+        code:values.verificationCode
+      }
+      let res=await Login(params)
+      if(!res.content.code){
+        message.error("验证码错误");
+       clearInterval(buttonInformation.timer);
+          buttonInformation.name = "重新获取";
+          buttonInformation.countdown = 60;
+          buttonInformation.loading = false;
+          buttonInformation.disable = false;
+      }
+      if(res.content.token){
+        message.success('注册成功');
+        push({
+          name:'Login'
+        })
+      }
     };
-
-    //获取验证码
-    const getCode = () => {
-      // if (!formState.username) {
-      //   message.error("用户名不能为空");
-      //   return false;
-      // }
+    //倒计时
+    const Countdown = () => {
       if (buttonInformation.timer) clearInterval(buttonInformation.timer);
       // buttonInformation.loading = true;
       buttonInformation.disable = true;
@@ -184,6 +211,17 @@ export default {
           buttonInformation.disable = false;
         }
       }, 1000);
+    };
+    //获取验证码
+    const getCode = async() => {
+      buttonInformation.name = "发送中";
+      const params={
+        username:formState.username,
+        type:'Register',
+      }
+      let res=await Send(params)
+      message.success(res.content);
+      Countdown()
     };
     return {
       fromConfig,

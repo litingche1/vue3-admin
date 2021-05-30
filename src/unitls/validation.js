@@ -21,6 +21,6 @@ export function checkPassword(value) {
  */
 
 export function checkCode(value) {
-    let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6}$/;
+    let reg = /^\d{6}$/;
     return reg.test(value)
 }

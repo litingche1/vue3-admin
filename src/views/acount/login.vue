@@ -37,7 +37,7 @@ export default {
 captcha
   },
   setup(props) {
-    console.log(props);
+    // console.log(props);
     const fromConfig = reactive({
       layout: {
         labelCol: { span: 4 },

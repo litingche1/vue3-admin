@@ -17,9 +17,17 @@ export function ChekcUsername(data) {
   });
 }
 /** 用户注册 */
-export function Login(data) {
+export function Register(data) {
   return service.request({
     url: "/v1/account/register",
+    method: "post",
+    data
+  });
+}
+/** 用户登录 */
+export function Login(data) {
+  return service.request({
+    url: "/v1/account/login",
     method: "post",
     data
   });

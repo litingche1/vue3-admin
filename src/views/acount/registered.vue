@@ -66,8 +66,9 @@ import { reactive, onMounted, ref } from "vue";
 import { message } from "ant-design-vue";
 import captcha from "@/components/captcha";
 import { checkPhone, checkPassword, checkCode } from "@/unitls/validation";
-import { ChekcUsername,Send,Login } from "@/api/user/index";
+import { ChekcUsername,Send,Register } from "@/api/user/index";
 import { useRouter } from "vue-router";
+import md5 from 'js-md5'
 export default {
   name: "registered",
   components: {
@@ -106,7 +107,8 @@ export default {
         if (!checkPhone(value)) {
           return Promise.reject("请输入正确的手机号码");
         }
-        ChekcUsernameFn();
+        buttonInformation.disable = false;
+        // ChekcUsernameFn();
         return Promise.resolve();
       }
     };
@@ -155,7 +157,7 @@ export default {
     //用户名检测是否已经注册
     const ChekcUsernameFn = () => {
       usernameStatus.value = true;
-      ChekcUsername({ username: formState.username }).then(res => {
+      return ChekcUsername({ username: formState.username }).then(res => {
         if (!res.content.user) {
           usernameStatus.value = false;
           buttonInformation.disable = false;
@@ -163,6 +165,7 @@ export default {
           message.error(res.msg);
           usernameStatus.value = false;
         }
+        return res.content.user
       });
     };
     const rules = reactive({
@@ -176,10 +179,11 @@ export default {
     const handleFinish = async values => {
       const params={
         username:values.username,
-        password:values.password,
+        password:md5(values.password),
         code:values.verificationCode
       }
-      let res=await Login(params)
+      console.log(params)
+      let res=await Register(params)
       if(!res.content.code){
         message.error("验证码错误");
        clearInterval(buttonInformation.timer);
@@ -214,6 +218,8 @@ export default {
     };
     //获取验证码
     const getCode = async() => {
+      let status=await ChekcUsernameFn()
+      if(status) return false
       buttonInformation.name = "发送中";
       const params={
         username:formState.username,
